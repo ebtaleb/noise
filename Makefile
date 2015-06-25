@@ -14,13 +14,11 @@ LDFLAGS        = `sdl-config --libs` -L. -L./bulletml -lSDL_mixer -lbulletml -ls
 
 MORE_CFLAGS = -O3
 
-CFLAGS  = $(DEFAULT_CFLAGS) $(MORE_CFLAGS)
-CPPFLAGS  = $(DEFAULT_CFLAGS) $(MORE_CFLAGS) -I./bulletml/
+CFLAGS  = $(DEFAULT_CFLAGS) $(MORE_CFLAGS) -ggdb3
+CPPFLAGS  = $(DEFAULT_CFLAGS) $(MORE_CFLAGS) -ggdb3 -I./bulletml/
 
-OBJS =	$(NAME).$(O) ship.$(O) shot.$(O) frag.$(O) bonus.$(O) \
-	foe.$(O) foecommand.$(O) barragemanager.$(O) attractmanager.$(O) \
-	background.$(O) letterrender.$(O) \
-	screen.$(O) clrtbl.$(O) vector.$(O) degutil.$(O) rand.$(O) soundmanager.$(O)
+OBJS =	$(NAME).$(O) barragemanager.$(O) foecommand.$(O) foe.$(O) \
+	screen.$(O) clrtbl.$(O) vector.$(O) degutil.$(O) rand.$(O)
 
 $(PROG): $(OBJS)
 	$(CC) $(CFLAGS) -o $(PROG) $(OBJS) $(LDFLAGS)

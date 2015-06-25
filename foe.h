@@ -37,7 +37,7 @@ struct foe {
   int shield;
   int cnt, color;
   int hit;
-  
+
   BulletMLParser *parser;
 };
 
@@ -49,11 +49,11 @@ extern "C" {
 
 extern int foeCnt, enNum[];
 
-Foe* addFoe(int x, int y, double rank, int d, int spd, int typek, int shield, 
+Foe* addFoe(int x, int y, double rank, int d, int spd, int typek, int shield,
 	    BulletMLParser *parser);
-Foe* addFoeBossActiveBullet(int x, int y, double rank, 
+Foe* addFoeBossActiveBullet(int x, int y, double rank,
 			    int d, int spd, BulletMLParser *state);
-void addFoeActiveBullet(Vector *pos, double rank, 
+void addFoeActiveBullet(Vector *pos, double rank,
 			int d, int spd, int color, BulletMLState *state);
 void addFoeNormalBullet(Vector *pos, double rank, int d, int spd, int color);
 void removeFoe(Foe *fe);

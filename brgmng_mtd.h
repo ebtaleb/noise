@@ -11,7 +11,7 @@
  */
 void initBarragemanager();
 void closeBarragemanager();
-void initBarrages(int seed, float startLevel, float li);
+void initBarrages();
 void setBarrages(float level, int bm, int midMode);
 void addBullets();
 void addBossBullet();

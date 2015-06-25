@@ -24,7 +24,6 @@
 typedef struct {
   BulletMLParser *bulletml;
   double maxRank, rank;
-  int type;
   int frq;
 } Barrage;
 

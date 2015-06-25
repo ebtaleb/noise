@@ -17,7 +17,6 @@
 extern "C" {
 #include "noiz2sa.h"
 #include "degutil.h"
-#include "ship.h"
 }
 
 #define COMMAND_SCREEN_SPD_RATE 800
@@ -40,7 +39,8 @@ double FoeCommand::getBulletDirection() {
 }
 
 double FoeCommand::getAimDirection() {
-  return ((double)getPlayerDeg(foe->pos.x, foe->pos.y)*360/DIV);
+  //return ((double)getPlayerDeg(foe->pos.x, foe->pos.y)*360/DIV);
+  return 1.5;
 }
 
 double FoeCommand::getBulletSpeed() {
@@ -57,13 +57,13 @@ double FoeCommand::getRank() {
 
 void FoeCommand::createSimpleBullet(double direction, double speed) {
   int d = (int)(direction*DIV/360); d &= (DIV-1);
-  addFoeNormalBullet(&(foe->pos), foe->rank, 
+  addFoeNormalBullet(&(foe->pos), foe->rank,
 		     d, (int)(speed*COMMAND_SCREEN_SPD_RATE), foe->color+1);
 }
 
 void FoeCommand::createBullet(BulletMLState* state, double direction, double speed) {
   int d = (int)(direction*DIV/360); d &= (DIV-1);
-  addFoeActiveBullet(&(foe->pos), foe->rank, 
+  addFoeActiveBullet(&(foe->pos), foe->rank,
 		     d, (int)(speed*COMMAND_SCREEN_SPD_RATE), foe->color+1, state);
 }
 

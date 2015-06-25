@@ -21,12 +21,6 @@ extern "C" {
 #include "screen.h"
 #include "vector.h"
 #include "degutil.h"
-#include "ship.h"
-#include "shot.h"
-#include "frag.h"
-#include "bonus.h"
-#include "soundmanager.h"
-#include "attractmanager.h"
 #include "brgmng_mtd.h"
 }
 
@@ -86,7 +80,7 @@ static Foe* getNextFoe() {
   return &(foe[i]);
 }
 
-Foe* addFoe(int x, int y, double rank, int d, int spd, int type, int shield, 
+Foe* addFoe(int x, int y, double rank, int d, int spd, int type, int shield,
 	    BulletMLParser *parser) {
   int i;
   Foe *fe = getNextFoe();
@@ -113,7 +107,7 @@ Foe* addFoe(int x, int y, double rank, int d, int spd, int type, int shield,
   return fe;
 }
 
-Foe* addFoeBossActiveBullet(int x, int y, double rank, 
+Foe* addFoeBossActiveBullet(int x, int y, double rank,
 			    int d, int spd, BulletMLParser *parser) {
   Foe *fe = addFoe(x, y, rank, d, spd, BOSS_TYPE, 0, parser);
   if ( !fe ) return NULL;
@@ -122,7 +116,7 @@ Foe* addFoeBossActiveBullet(int x, int y, double rank,
   return fe;
 }
 
-void addFoeActiveBullet(Vector *pos, double rank, 
+void addFoeActiveBullet(Vector *pos, double rank,
 			int d, int spd, int color, BulletMLState *state) {
   Foe *fe = getNextFoe();
   if ( !fe ) return;
@@ -161,7 +155,6 @@ static void wipeBullets(Vector *pos, int width) {
     if ( foe[i].spc != ACTIVE_BULLET && foe[i].spc != BULLET ) continue;
     fe = &(foe[i]);
     if ( vctDist(pos, &(fe->pos)) < width ) {
-      addBonus(&(fe->pos), &(fe->mv));
       removeFoeForced(fe);
     }
   }
@@ -169,10 +162,9 @@ static void wipeBullets(Vector *pos, int width) {
 
 static int foeSize[] = {30, 40, 56, 96};
 static int foeScanSize[] = {
-  foeSize[0]*256*SCAN_WIDTH/LAYER_WIDTH/4*3, foeSize[1]*256*SCAN_WIDTH/LAYER_WIDTH/4*3, 
-  foeSize[2]*256*SCAN_WIDTH/LAYER_WIDTH/4*3, foeSize[3]*256*SCAN_WIDTH/LAYER_WIDTH/4*3, 
+  foeSize[0]*256*SCAN_WIDTH/LAYER_WIDTH/4*3, foeSize[1]*256*SCAN_WIDTH/LAYER_WIDTH/4*3,
+  foeSize[2]*256*SCAN_WIDTH/LAYER_WIDTH/4*3, foeSize[3]*256*SCAN_WIDTH/LAYER_WIDTH/4*3,
 };
-#define SHOT_SCAN_HEIGHT (SHOT_HEIGHT*256*SCAN_HEIGHT/LAYER_HEIGHT/2)
 static int enemyScore[] = {500, 1000, 5000, 50000};
 
 #define SHIP_HIT_WIDTH 512*512
@@ -224,45 +216,18 @@ void moveFoes() {
 
     if ( fe->spc == FOE ) {
       fe->hit = 0;
-      // Check if the shot hits the foe.
-      for ( j=0 ; j<SHOT_MAX ; j++ ) {
-	if ( shot[j].cnt != NOT_EXIST ) {
-	  if ( absN(fe->pos.x-shot[j].pos.x) < foeScanSize[fe->type] &&
-	       absN(fe->pos.y-shot[j].pos.y) < foeScanSize[fe->type]+SHOT_SCAN_HEIGHT ) {
-	    shot[j].cnt = NOT_EXIST;
-	    fe->shield--; fe->hit = 1;
-	    addShotFrag(&shot[j].pos);
-	    if ( fe->shield <= 0 ) {
-	      addScore(enemyScore[fe->type]);
-	      wipeBullets(&(fe->pos), BULLET_WIPE_WIDTH*(fe->type+1));
-	      addEnemyFrag(&(fe->pos), mx, my, fe->type);
-	      if ( fe->type == BOSS_TYPE ) {
-		bossDestroied();
-		playChunk(3);
-	      } else {
-		playChunk(2);
-	      }
-	      removeFoeForced(fe);
-	      continue;
-	    }
-	    playChunk(1);
-	  }
-	}
-      }
     } else {
       // Check if the bullet hits the ship.
       bmv = fe->pos;
       vctSub(&bmv, &(fe->ppos));
       inaa = vctInnerProduct(&bmv, &bmv);
       if ( inaa > 1.0f ) {
-	sofs = ship.pos;
 	vctSub(&sofs, &(fe->ppos));
 	inab = vctInnerProduct(&bmv, &sofs);
 	ht =  inab / inaa;
 	if ( ht > 0.0f && ht < 1.0f ) {
 	  hd = vctInnerProduct(&sofs, &sofs) - inab*inab/inaa/inaa;
 	  if ( hd >= 0 && hd < SHIP_HIT_WIDTH ) {
-	    destroyShip();
 	  }
 	}
       }
@@ -277,34 +242,6 @@ void moveFoes() {
 
   // A game speed becomes slow as many bullets appears.
   interval = INTERVAL_BASE;
-  if ( !insane && !nowait && foeNum > processSpeedDownBulletsNum ) {
-    interval += (foeNum-processSpeedDownBulletsNum) * INTERVAL_BASE / 
-      processSpeedDownBulletsNum;
-    if ( interval > INTERVAL_BASE*2 ) interval = INTERVAL_BASE*2;
-  }
-}
-
-void clearFoes() {
-  int i;
-  Foe *fe;
-  for ( i=0 ; i<FOE_MAX ; i++ ) {
-    if ( foe[i].spc == NOT_EXIST ) continue;
-    fe = &(foe[i]);
-    addClearFrag(&(fe->pos), &(fe->mv));
-    removeFoeForced(fe);
-  }
-}
-
-void clearFoesZako() {
-  int i;
-  Foe *fe;
-  for ( i=0 ; i<FOE_MAX ; i++ ) {
-    if ( foe[i].spc == NOT_EXIST || 
-	 foe[i].type == BOSS_TYPE || foe[i].spc == BOSS_ACTIVE_BULLET ) continue;
-    fe = &(foe[i]);
-    addClearFrag(&(fe->pos), &(fe->mv));
-    removeFoeForced(fe);
-  }
 }
 
 
@@ -362,11 +299,11 @@ void drawFoes() {
 #define BULLET_COLOR_NUM 3
 
 static int bulletColor[BULLET_COLOR_NUM][2] = {
-  {16*14-1, 16*2-1}, {16*16-1, 16*4-1}, {16*12-1, 16*6-1}, 
+  {16*14-1, 16*2-1}, {16*16-1, 16*4-1}, {16*12-1, 16*6-1},
 };
 
 #define BULLET_WIDTH 6
- 
+
 void drawBullets() {
   int i;
   Foe *fe;

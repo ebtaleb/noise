@@ -20,8 +20,6 @@
 #include "clrtbl.h"
 #include "vector.h"
 #include "degutil.h"
-#include "letterrender.h"
-#include "attractmanager.h"
 
 int windowMode = 0;
 int brightness = DEFAULT_BRIGHTNESS;
@@ -36,47 +34,8 @@ static SDL_Rect screenRect, layerRect, layerClearRect;
 static SDL_Rect lpanelRect, rpanelRect, panelClearRect;
 static int pitch, ppitch;
 
-// Handle BMP images.
-#define SPRITE_NUM 7
-
-static SDL_Surface *sprite[SPRITE_NUM];
-static char *spriteFile[SPRITE_NUM] = {
-  "title_n.bmp", "title_o.bmp", "title_i.bmp", "title_z.bmp", "title_2.bmp", 
-  "title_s.bmp", "title_a.bmp",
-};
-
 Uint8 *keys;
 SDL_Joystick *stick = NULL;
-
-static void loadSprites() {
-  SDL_Surface *img;
-  int i;
-  char name[32];
-  color[0].r = 100; color[0].g = 0; color[0].b = 0;
-  SDL_SetColors(video, color, 0, 1);
-  for ( i=0 ; i<SPRITE_NUM ; i++ ) {
-    strcpy(name, "images/");
-    strcat(name, spriteFile[i]);
-    img = SDL_LoadBMP(name);
-    if ( img == NULL ) {
-      fprintf(stderr, "Unable to load: %s\n", name);
-      SDL_Quit();
-      exit(1);
-    }
-    sprite[i] = SDL_ConvertSurface(img,
-				   video->format, 
-				   SDL_HWSURFACE | SDL_SRCCOLORKEY);
-    SDL_SetColorKey(sprite[i], SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
-  }
-  color[0].r = color[0].g = color[0].b = 255;
-  SDL_SetColors(video, color, 0, 1);
-}
-
-void drawSprite(int n, int x, int y) {
-  SDL_Rect pos;
-  pos.x = x; pos.y = y;
-  SDL_BlitSurface(sprite[n], NULL, video, &pos);
-}
 
 // Initialize palletes.
 static void initPalette() {
@@ -114,7 +73,7 @@ static void makeSmokeBuf() {
       my = y + sctbl[(y*8)&(DIV-1)]/128;
       if ( mx < 0 || mx >= LAYER_WIDTH || my < 0 || my >= LAYER_HEIGHT ) {
 	smokeBuf[x+y*pitch] = &(pbuf[pitch*LAYER_HEIGHT]);
-      } else {	
+      } else {
 	smokeBuf[x+y*pitch] = &(pbuf[mx+my*pitch]);
       }
     }
@@ -184,8 +143,6 @@ void initSDL(int window) {
   clearLPanel();
   clearRPanel();
 
-  loadSprites();
-
   stick = SDL_JoystickOpen(0);
 
   SDL_WM_SetCaption(CAPTION, NULL);
@@ -208,9 +165,7 @@ void flipScreen() {
   SDL_BlitSurface(layer, NULL, video, &layerRect);
   SDL_BlitSurface(lpanel, NULL, video, &lpanelRect);
   SDL_BlitSurface(rpanel, NULL, video, &rpanelRect);
-  if ( status == TITLE ) {
-    drawTitle();
-  }
+
   SDL_Flip(video);
 }
 
@@ -234,7 +189,6 @@ void smokeScreen() {
     l2buf[i] = colorDfs[*(smokeBuf[i])];
   }
 }
-
 
 void drawLine(int x1, int y1, int x2, int y2, LayerBit color, int width, LayerBit *buf) {
   int lx, ly, ax, ay, x, y, ptr, i, j;
@@ -312,7 +266,7 @@ void drawLine(int x1, int y1, int x2, int y2, LayerBit color, int width, LayerBi
   }
 }
 
-void drawThickLine(int x1, int y1, int x2, int y2, 
+void drawThickLine(int x1, int y1, int x2, int y2,
 		   LayerBit color1, LayerBit color2, int width) {
   int lx, ly, ax, ay, x, y, ptr, i, j;
   int xMax, yMax;
@@ -407,7 +361,7 @@ void drawThickLine(int x1, int y1, int x2, int y2,
   }
 }
 
-void drawBox(int x, int y, int width, int height, 
+void drawBox(int x, int y, int width, int height,
 	     LayerBit color1, LayerBit color2, LayerBit *buf) {
   int i, j;
   LayerBit cl;
@@ -443,7 +397,7 @@ void drawBox(int x, int y, int width, int height,
   memset(&(buf[ptr]), color2, width);
 }
 
-void drawBoxPanel(int x, int y, int width, int height, 
+void drawBoxPanel(int x, int y, int width, int height,
 		  LayerBit color1, LayerBit color2, LayerBit *buf) {
   int i, j;
   LayerBit cl;
@@ -478,46 +432,6 @@ void drawBoxPanel(int x, int y, int width, int height,
   ptr = x + y*PANEL_WIDTH;
   memset(&(buf[ptr]), color2, width);
 }
-
-// Draw the numbers.
-int drawNum(int n, int x ,int y, int s, int c1, int c2) {
-  for ( ; ; ) {
-    drawLetter(n%10, x, y, s, 1, c1, c2, lpbuf);
-    y += s*1.7f;
-    n /= 10;
-    if ( n <= 0 ) break;
-  }
-  return y;
-}
-
-int drawNumRight(int n, int x ,int y, int s, int c1, int c2) {
-  int d, nd, drawn = 0;
-  for ( d = 100000000 ; d > 0 ; d /= 10 ) {
-    nd = (int)(n/d);
-    if ( nd > 0 || drawn ) {
-      n -= d*nd;
-      drawLetter(nd%10, x, y, s, 3, c1, c2, rpbuf);
-      y += s*1.7f;
-      drawn = 1;
-    }
-  }
-  if ( !drawn ) {
-    drawLetter(0, x, y, s, 3, c1, c2, rpbuf);
-    y += s*1.7f;
-  }
-  return y;
-}
-
-int drawNumCenter(int n, int x ,int y, int s, int c1, int c2) {
-  for ( ; ; ) {
-    drawLetterBuf(n%10, x, y, s, 2, c1, c2, buf, 0);
-    x -= s*1.7f;
-    n /= 10;
-    if ( n <= 0 ) break;
-  }
-  return y;
-}
-
 
 #define JOYSTICK_AXIS 16384
 

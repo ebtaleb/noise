@@ -32,8 +32,5 @@ extern int tick;
 #define PAUSE 4
 
 void quitLast();
-void initTitleStage(int stg);
 void initTitle();
-void initGame(int stg);
-void initGameover();
-void initStageClear();
+void initGame();
