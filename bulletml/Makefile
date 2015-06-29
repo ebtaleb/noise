@@ -1,9 +1,9 @@
-CC = g++
+CC = c++
 INCLUDES = -I.
 LIBS = tinyxml/tinyxml.o tinyxml/tinyxmlparser.o tinyxml/tinyxmlerror.o
 #CXXFLAGS = -g -W -Wall -ansi -pedantic
 #CXXFLAGS = -pg -g -W -Wall -ansi -pedantic
-CXXFLAGS = -O2 -W -Wall -ansi -pedantic
+CXXFLAGS = -O2 -std=c++11 -W -Wall -ansi -pedantic
 CFLAGS = -O2
 OBJS = bulletmlparser-tinyxml.o bulletmlparser.o bulletmltree.o calc.o formula-variables.o bulletmlrunner.o bulletmlrunnerimpl.o
 

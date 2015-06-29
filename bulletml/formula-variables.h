@@ -7,6 +7,7 @@
 
 #include <cstdlib>
 #include <vector>
+#include <memory>
 
 namespace Variables {
 	DECLSPEC extern double rank;

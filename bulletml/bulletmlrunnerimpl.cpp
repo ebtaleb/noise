@@ -374,7 +374,7 @@ void BulletMLRunnerImpl::runRepeat() {
 }
 
 void BulletMLRunnerImpl::runFireRef() {
-	boost::shared_ptr<Parameters> prevPara = parameters_;
+	std::tr1::shared_ptr<Parameters> prevPara = parameters_;
 	parameters_.reset(getParameters());
 
 	refStack_.push(std::make_pair(act_, prevPara));
@@ -382,7 +382,7 @@ void BulletMLRunnerImpl::runFireRef() {
 }
 
 void BulletMLRunnerImpl::runActionRef() {
-	boost::shared_ptr<Parameters> prevPara = parameters_;
+	std::tr1::shared_ptr<Parameters> prevPara = parameters_;
 	parameters_.reset(getParameters());
 
 	refStack_.push(std::make_pair(act_, prevPara));
@@ -390,7 +390,7 @@ void BulletMLRunnerImpl::runActionRef() {
 }
 
 void BulletMLRunnerImpl::runBulletRef() {
-	boost::shared_ptr<Parameters> prevPara = parameters_;
+	std::tr1::shared_ptr<Parameters> prevPara = parameters_;
 	parameters_.reset(getParameters());
 
 	refStack_.push(std::make_pair(act_, prevPara));
@@ -424,7 +424,7 @@ void BulletMLRunnerImpl::runChangeSpeed() {
 		spd = getNumberContents(spdNode) * (double)term
 			+ runner_->getBulletSpeed();
 	}
-	
+
 
 	calcChangeSpeed(spd, term);
 
@@ -562,4 +562,4 @@ BulletMLRunnerImpl::Parameters* BulletMLRunnerImpl::getParameters() {
 	return para;
 }
 
-	
+
