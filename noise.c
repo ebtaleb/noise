@@ -1,20 +1,9 @@
-/*
- * $Id: noiz2sa.c,v 1.8 2003/02/12 13:55:13 kenta Exp $
- *
- * Copyright 2002 Kenta Cho. All rights reserved.
- */
-
-/**
- * Noiz2sa main routine.
- *
- * @version $Revision: 1.8 $
- */
 #include "SDL.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
-#include "noiz2sa.h"
+#include "noise.h"
 #include "screen.h"
 #include "vector.h"
 #include "brgmng_mtd.h"

@@ -1,14 +1,3 @@
-/*
- * $Id: foecommand.h,v 1.2 2003/08/10 04:09:46 kenta Exp $
- *
- * Copyright 2002 Kenta Cho. All rights reserved.
- */
-
-/**
- * Foe commands data.
- *
- * @version $Revision: 1.2 $
- */
 #ifndef FOECOMMAND_H_
 #define FOECOMMAND_H_
 

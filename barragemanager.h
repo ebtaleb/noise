@@ -1,14 +1,3 @@
-/*
- * $Id: barragemanager.h,v 1.2 2003/08/10 04:09:46 kenta Exp $
- *
- * Copyright 2002 Kenta Cho. All rights reserved.
- */
-
-/**
- * Barrage data.
- *
- * @version $Revision: 1.2 $
- */
 #ifndef BARRAGEMANAGER_H_
 #define BARRAGEMANAGER_H_
 

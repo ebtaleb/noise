@@ -1,14 +1,3 @@
-/*
- * $Id: noiz2sa.h,v 1.4 2003/02/09 07:34:16 kenta Exp $
- *
- * Copyright 2002 Kenta Cho. All rights reserved.
- */
-
-/**
- * Noiz2sa header file.
- *
- * @version $Revision: 1.4 $
- */
 #define randN(N) (rand()%(N))
 #define randNS(N) (rand()%(N<<1)-N)
 #define randNS2(N) ((rand()%(N)-(N>>1)) + (rand()%(N)-(N>>1)))
@@ -16,9 +5,7 @@
 
 #define INTERVAL_BASE 16
 
-#define CAPTION "Noiz2sa"
-#define VERSION_NUM 50
-
+#define CAPTION "noise"
 #define NOT_EXIST -999999
 
 extern int status;

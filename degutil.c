@@ -1,14 +1,3 @@
-/*
- * $Id: degutil.c,v 1.1.1.1 2002/11/03 11:08:24 kenta Exp $
- *
- * Copyright 2002 Kenta Cho. All rights reserved.
- */
-
-/**
- * Changing the cordinate into the angle.
- *
- * @version $Revision: 1.1.1.1 $
- */
 #include <math.h>
 #include "degutil.h"
 

@@ -1,16 +1,4 @@
-/*
- * $Id: vector.c,v 1.1.1.1 2002/11/03 11:08:24 kenta Exp $
- *
- * Copyright 2002 Kenta Cho. All rights reserved.
- */
-
-/**
- * Vector functions.
- *
- * @version $Revision: 1.1.1.1 $
- */
 #include <math.h>
-
 #include "vector.h"
 
 float vctInnerProduct(Vector *v1, Vector *v2) {
@@ -25,7 +13,7 @@ Vector vctGetElement(Vector *v1, Vector *v2) {
     ans.x = mag*v2->x/ll;
     ans.y = mag*v2->y/ll;
   } else {
-    ans.x = ans.y = 0; 
+    ans.x = ans.y = 0;
   }
   return ans;
 }
@@ -40,12 +28,12 @@ void vctSub(Vector *v1, Vector *v2) {
   v1->y -= v2->y;
 }
 
-void vctMul(Vector *v1, int a) {	
+void vctMul(Vector *v1, int a) {
   v1->x *= a;
   v1->y *= a;
 }
 
-void vctDiv(Vector *v1, int a) {	
+void vctDiv(Vector *v1, int a) {
   v1->x /= a;
   v1->y /= a;
 }
@@ -58,7 +46,7 @@ int vctCheckSide(Vector *checkPos, Vector *pos1, Vector *pos2) {
   } else if ( yo == 0 ) {
     return pos1->y - checkPos->y;
   } else {
-    if ( xo*yo > 0 ) { 
+    if ( xo*yo > 0 ) {
       return (checkPos->x-pos1->x)/xo - (checkPos->y-pos1->y)/yo;
     } else {
       return -(checkPos->x-pos1->x)/xo + (checkPos->y-pos1->y)/yo;

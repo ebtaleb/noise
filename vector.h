@@ -1,14 +1,3 @@
-/*
- * $Id: vector.h,v 1.1.1.1 2002/11/03 11:08:24 kenta Exp $
- *
- * Copyright 2002 Kenta Cho. All rights reserved.
- */
-
-/**
- * Vector data.
- *
- * @version $Revision: 1.1.1.1 $
- */
 #ifndef DEF_VECTOR
 #define absN(a) ((a) < 0 ? - (a) : (a))
 
@@ -18,7 +7,7 @@ typedef struct {
 #define DEF_VECTOR
 #endif
 
-float vctInnerProduct(Vector *v1, Vector *v2); 
+float vctInnerProduct(Vector *v1, Vector *v2);
 Vector vctGetElement(Vector *v1, Vector *v2);
 void vctAdd(Vector *v1, Vector *v2);
 void vctSub(Vector *v1, Vector *v2);

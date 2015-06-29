@@ -1,19 +1,7 @@
-/*
- * $Id: barragemanager.cc,v 1.4 2003/02/09 07:34:15 kenta Exp $
- *
- * Copyright 2002 Kenta Cho. All rights reserved.
- */
-
-/**
- * Handle stage data.
- *
- * @version $Revision: 1.4 $
- */
 extern "C" {
 #include "SDL.h"
 #include <sys/types.h>
-#include <dirent.h>
-#include "noiz2sa.h"
+#include "noise.h"
 #include "degutil.h"
 #include "vector.h"
 #include "screen.h"

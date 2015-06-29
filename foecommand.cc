@@ -1,21 +1,10 @@
-/*
- * $Id: foecommand.cc,v 1.2 2003/08/10 04:09:46 kenta Exp $
- *
- * Copyright 2002 Kenta Cho. All rights reserved.
- */
-
-/**
- * Handle bullet commands.
- *
- * @version $Revision: 1.2 $
- */
 #include "bulletml/bulletmlparser.h"
 #include "bulletml/bulletmlparser-tinyxml.h"
 #include "bulletml/bulletmlrunner.h"
 #include "foe.h"
 
 extern "C" {
-#include "noiz2sa.h"
+#include "noise.h"
 #include "degutil.h"
 }
 
@@ -40,7 +29,7 @@ double FoeCommand::getBulletDirection() {
 
 double FoeCommand::getAimDirection() {
   //return ((double)getPlayerDeg(foe->pos.x, foe->pos.y)*360/DIV);
-  return 1.5;
+  return -1.5;
 }
 
 double FoeCommand::getBulletSpeed() {

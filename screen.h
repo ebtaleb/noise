@@ -1,14 +1,3 @@
-/*
- * $Id: screen.h,v 1.3 2002/12/31 09:34:34 kenta Exp $
- *
- * Copyright 2002 Kenta Cho. All rights reserved.
- */
-
-/**
- * SDL screen functions header file.
- *
- * @version $Revision: 1.3 $
- */
 #include "SDL.h"
 #include "vector.h"
 

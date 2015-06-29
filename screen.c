@@ -1,21 +1,10 @@
-/*
- * $Id: screen.c,v 1.3 2003/02/09 07:34:16 kenta Exp $
- *
- * Copyright 2002 Kenta Cho. All rights reserved.
- */
-
-/**
- * SDL screen handler.
- *
- * @version $Revision: 1.3 $
- */
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "SDL.h"
 
-#include "noiz2sa.h"
+#include "noise.h"
 #include "screen.h"
 #include "clrtbl.h"
 #include "vector.h"

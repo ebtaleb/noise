@@ -1,14 +1,3 @@
-/*
- * $Id: foe.h,v 1.2 2003/08/10 04:09:46 kenta Exp $
- *
- * Copyright 2002 Kenta Cho. All rights reserved.
- */
-
-/**
- * Enemy data.
- *
- * @version $Revision: 1.2 $
- */
 #ifndef FOE_H_
 #define FOE_H_
 

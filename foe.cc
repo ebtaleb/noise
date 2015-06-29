@@ -1,14 +1,3 @@
-/*
- * $Id: foe.cc,v 1.5 2003/01/03 05:24:21 kenta Exp $
- *
- * Copyright 2002 Kenta Cho. All rights reserved.
- */
-
-/**
- * Handle enemy.
- *
- * @version $Revision: 1.5 $
- */
 #include "barragemanager.h"
 #include "foe.h"
 
@@ -17,7 +6,7 @@ extern "C" {
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "noiz2sa.h"
+#include "noise.h"
 #include "screen.h"
 #include "vector.h"
 #include "degutil.h"
