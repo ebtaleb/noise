@@ -8,15 +8,8 @@
 #define CAPTION "noise"
 #define NOT_EXIST -999999
 
-extern int status;
 extern int interval;
 extern int tick;
-
-#define TITLE 0
-#define IN_GAME 1
-#define GAMEOVER 2
-#define STAGE_CLEAR 3
-#define PAUSE 4
 
 void quitLast();
 void initTitle();
