@@ -28,7 +28,6 @@ double FoeCommand::getBulletDirection() {
 }
 
 double FoeCommand::getAimDirection() {
-  //return ((double)getPlayerDeg(foe->pos.x, foe->pos.y)*360/DIV);
   return ((double)getDeg(foe->pos.x - 250, foe->pos.y - 340)*360/DIV);
 }
 

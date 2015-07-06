@@ -91,7 +91,7 @@ Foe* addFoe(int x, int y, double rank, int d, int spd, int type, int shield,
   fe->color = 0;
   fe->hit = 0;
 
-  foeCnt++; enNum[type]++;
+  //foeCnt++; enNum[type]++;
 
   return fe;
 }
@@ -190,8 +190,8 @@ void moveFoes() {
 	continue;
       }
     }
-    mx =  ((sctbl[fe->d]*fe->spd)>>8) + fe->vel.x;
-    my = -((sctbl[fe->d+256]*fe->spd)>>8) + fe->vel.y;
+    mx =  ((sctbl[fe->d % 1280]*fe->spd)>>8) + fe->vel.x;
+    my = -((sctbl[(fe->d+256) % 1280]*fe->spd)>>8) + fe->vel.y;
     fe->pos.x += mx;
     fe->pos.y += my;
     fe->mv.x = mx;

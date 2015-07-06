@@ -33,15 +33,6 @@ void initGame() {
     initFoes();
 }
 
-static void move() {
-    addBullets();
-    moveFoes();
-}
-
-static void draw() {
-    drawBullets();
-}
-
 static void usage(char *argv0) {
     fprintf(stderr, "Usage: %s [-window] [-reverse] [-brightness n]\n", argv0);
 }
@@ -97,7 +88,7 @@ int main(int argc, char *argv[]) {
         keys = SDL_GetKeyState(NULL);
 
         if (event.type == SDL_MOUSEMOTION) {
-            printf("%d, %d\n", event.motion.x, event.motion.y);
+            /*printf("%d, %d\n", event.motion.x, event.motion.y);*/
         }
 
         if ( keys[SDLK_ESCAPE] == SDL_PRESSED || event.type == SDL_QUIT )
@@ -111,6 +102,7 @@ int main(int argc, char *argv[]) {
             pPrsd = 0;
         }
 
+        clearScreen();
         nowTick = SDL_GetTicks();
         frame = (int)(nowTick-prvTickCount) / interval;
         if ( frame <= 0 ) {
@@ -124,11 +116,14 @@ int main(int argc, char *argv[]) {
             prvTickCount += frame*interval;
         }
         for ( i=0 ; i<frame ; i++ ) {
-            move();
+
+            addBullets();
+            moveFoes();
+
             tick++;
         }
         smokeScreen();
-        draw();
+        drawBullets();
         flipScreen();
     }
     quitLast();
