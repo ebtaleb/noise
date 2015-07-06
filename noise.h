@@ -4,8 +4,6 @@
 #define absN(a) ((a) < 0 ? - (a) : (a))
 
 #define INTERVAL_BASE 16
-
-#define CAPTION "noise"
 #define NOT_EXIST -999999
 
 extern int interval;

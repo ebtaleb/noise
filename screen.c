@@ -134,8 +134,7 @@ void initSDL(int window) {
 
   stick = SDL_JoystickOpen(0);
 
-  SDL_WM_SetCaption(CAPTION, NULL);
-  SDL_ShowCursor(SDL_DISABLE);
+  SDL_ShowCursor(SDL_ENABLE);
   //SDL_WM_GrabInput(SDL_GRAB_ON);
 }
 
