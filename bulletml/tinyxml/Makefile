@@ -26,7 +26,7 @@ RELEASE_CFLAGS   := -Wall -Wno-unknown-pragmas -Wno-format -O2
 
 LIBS		 :=
 
-DEBUG_CXXFLAGS   := ${DEBUG_CFLAGS} 
+DEBUG_CXXFLAGS   := ${DEBUG_CFLAGS}
 RELEASE_CXXFLAGS := ${RELEASE_CFLAGS}
 
 DEBUG_LDFLAGS    := -g
@@ -86,7 +86,7 @@ all: ${OUTPUT}
 # Source files
 #****************************************************************************
 
-SRCS := tinyxml.cpp tinyxmlparser.cpp xmltest.cpp tinyxmlerror.cpp
+SRCS := tinyxml.cpp tinyxmlparser.cpp tinyxmlerror.cpp
 
 # Add on the sources for libraries
 SRCS := ${SRCS}
@@ -98,7 +98,7 @@ OBJS := $(addsuffix .o,$(basename ${SRCS}))
 #****************************************************************************
 
 ${OUTPUT}: ${OBJS}
-	${LD} -o $@ ${LDFLAGS} ${OBJS} ${LIBS} ${EXTRA_LIBS}
+	#${LD} -o $@ ${LDFLAGS} ${OBJS} ${LIBS} ${EXTRA_LIBS}
 
 #****************************************************************************
 # common rules
