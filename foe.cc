@@ -149,8 +149,6 @@ void moveFoes() {
     int foeNum = 0;
     int mx, my;
     int wl;
-    Vector bmv, sofs;
-    float ht, hd, inab, inaa;
 
     for ( i=0 ; i<FOE_MAX ; i++ ) {
         if ( foe[i].spc == NOT_EXIST ) continue;
@@ -171,8 +169,12 @@ void moveFoes() {
                 continue;
             }
         }
-        mx =  ((sctbl[fe->d % 1280]*fe->spd)>>8) + fe->vel.x;
-        my = -((sctbl[(fe->d+256) % 1280]*fe->spd)>>8) + fe->vel.y;
+
+        int d = (int)(fe->d*TABLE_SIZE/360);
+        d &= (TABLE_SIZE-1);
+
+        mx = ((sintbl[d]*fe->spd)>>8) + fe->vel.x;
+        my = ((costbl[d]*-fe->spd)>>8) + fe->vel.y;
         fe->pos.x += mx;
         fe->pos.y += my;
         fe->mv.x = mx;
@@ -184,24 +186,6 @@ void moveFoes() {
         fe->ppos.y = fe->pos.y - (my<<wl);
         fe->cnt++;
 
-        if ( fe->spc == FOE ) {
-            fe->hit = 0;
-        } else {
-            // Check if the bullet hits the ship.
-            bmv = fe->pos;
-            vctSub(&bmv, &(fe->ppos));
-            inaa = vctInnerProduct(&bmv, &bmv);
-            if ( inaa > 1.0f ) {
-                vctSub(&sofs, &(fe->ppos));
-                inab = vctInnerProduct(&bmv, &sofs);
-                ht =  inab / inaa;
-                if ( ht > 0.0f && ht < 1.0f ) {
-                    hd = vctInnerProduct(&sofs, &sofs) - inab*inab/inaa/inaa;
-                    if ( hd >= 0 && hd < SHIP_HIT_WIDTH ) {
-                    }
-                }
-            }
-        }
         if ( fe->ppos.x < 0 || fe->ppos.x >= SCAN_WIDTH_8 ||
                 fe->ppos.y < 0 || fe->ppos.y >= SCAN_HEIGHT_8 ) {
             removeFoeForced(fe);
