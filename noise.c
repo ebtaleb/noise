@@ -14,18 +14,9 @@
 #include "degutil.h"
 #include "foe_mtd.h"
 
-static int core = 0;
-
 static void initFirst() {
     srand(SDL_GetTicks());
     initBarragemanager();
-}
-
-void quitLast() {
-    closeBarragemanager();
-    closeSDL();
-    SDL_Quit();
-    exit(1);
 }
 
 void initGame() {
@@ -65,7 +56,6 @@ int main(int argc, char *argv[]) {
     int done = 0;
     long prvTickCount = 0;
     int i;
-    int btn;
     SDL_Event event;
     long nowTick;
     int frame;
@@ -126,5 +116,9 @@ int main(int argc, char *argv[]) {
         drawBullets();
         flipScreen();
     }
-    quitLast();
+
+    closeBarragemanager();
+    closeSDL();
+    SDL_Quit();
+    return 0;
 }

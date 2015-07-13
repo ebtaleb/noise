@@ -6,7 +6,7 @@ CXX    = g++
 
 PROG        = $(NAME)
 
-DEFAULT_CFLAGS = `sdl-config --cflags`
+DEFAULT_CFLAGS = `sdl-config --cflags` -Wall
 LDFLAGS        = `sdl-config --libs` -L./bulletml -lbulletml -lstdc++ -lm
 
 CFLAGS  = $(DEFAULT_CFLAGS)
