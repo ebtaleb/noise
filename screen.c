@@ -13,15 +13,13 @@
 int windowMode = 0;
 int brightness = DEFAULT_BRIGHTNESS;
 
-static SDL_Surface *video, *layer, *lpanel, *rpanel;
+static SDL_Surface *video, *layer;
 static LayerBit **smokeBuf;
 static LayerBit *pbuf;
 LayerBit *l1buf, *l2buf;
 LayerBit *buf;
-LayerBit *lpbuf, *rpbuf;
 static SDL_Rect screenRect, layerRect, layerClearRect;
-static SDL_Rect lpanelRect, rpanelRect, panelClearRect;
-static int pitch, ppitch;
+static int pitch;
 
 Uint8 *keys;
 SDL_Joystick *stick = NULL;
@@ -36,16 +34,14 @@ static void initPalette() {
     }
     SDL_SetColors(video, color, 0, 256);
     SDL_SetColors(layer, color, 0, 256);
-    SDL_SetColors(lpanel, color, 0, 256);
-    SDL_SetColors(rpanel, color, 0, 256);
 }
 
 static int lyrSize;
 
 static void makeSmokeBuf() {
     int x, y, mx, my;
-    lyrSize = sizeof(LayerBit)*pitch*LAYER_HEIGHT;
-    if ( NULL == (smokeBuf = (LayerBit**)malloc(sizeof(LayerBit*)*pitch*LAYER_HEIGHT)) ) {
+    lyrSize = sizeof(LayerBit)*pitch*SCREEN_HEIGHT;
+    if ( NULL == (smokeBuf = (LayerBit**)malloc(sizeof(LayerBit*)*pitch*SCREEN_HEIGHT)) ) {
         fprintf(stderr, "Couldn't malloc smokeBuf.");
         exit(1);
     }
@@ -57,13 +53,13 @@ static void makeSmokeBuf() {
         exit(1);
     }
 
-    pbuf[pitch*LAYER_HEIGHT] = 0;
-    for ( y=0 ; y<LAYER_HEIGHT ; y++ ) {
-        for ( x=0 ; x<LAYER_WIDTH ; x++ ) {
+    pbuf[pitch*SCREEN_HEIGHT] = 0;
+    for ( y=0 ; y<SCREEN_HEIGHT ; y++ ) {
+        for ( x=0 ; x<SCREEN_WIDTH ; x++ ) {
             mx = x + sctbl[(x*8)&(DIV-1)]/128;
             my = y + sctbl[(y*8)&(DIV-1)]/128;
-            if ( mx < 0 || mx >= LAYER_WIDTH || my < 0 || my >= LAYER_HEIGHT ) {
-                smokeBuf[x+y*pitch] = &(pbuf[pitch*LAYER_HEIGHT]);
+            if ( mx < 0 || mx >= SCREEN_WIDTH || my < 0 || my >= SCREEN_HEIGHT ) {
+                smokeBuf[x+y*pitch] = &(pbuf[pitch*SCREEN_HEIGHT]);
             } else {
                 smokeBuf[x+y*pitch] = &(pbuf[mx+my*pitch]);
             }
@@ -96,45 +92,25 @@ void initSDL(int window) {
     screenRect.w = SCREEN_WIDTH; screenRect.h = SCREEN_HEIGHT;
     pfrm = video->format;
     if ( NULL == ( layer = SDL_CreateRGBSurface
-                (SDL_SWSURFACE, LAYER_WIDTH, LAYER_HEIGHT, videoBpp,
-                 pfrm->Rmask, pfrm->Gmask, pfrm->Bmask, pfrm->Amask)) ||
-            NULL == ( lpanel = SDL_CreateRGBSurface
-                (SDL_SWSURFACE, PANEL_WIDTH, PANEL_HEIGHT, videoBpp,
-                 pfrm->Rmask, pfrm->Gmask, pfrm->Bmask, pfrm->Amask)) ||
-            NULL == ( rpanel = SDL_CreateRGBSurface
-                (SDL_SWSURFACE, PANEL_WIDTH, PANEL_HEIGHT, videoBpp,
+                (SDL_SWSURFACE, SCREEN_WIDTH, SCREEN_HEIGHT, videoBpp,
                  pfrm->Rmask, pfrm->Gmask, pfrm->Bmask, pfrm->Amask)) ) {
         fprintf(stderr, "Couldn't create surface: %s\n", SDL_GetError());
         exit(1);
     }
 
-    layerRect.x = (SCREEN_WIDTH-LAYER_WIDTH)/2;
-    layerRect.y = (SCREEN_HEIGHT-LAYER_HEIGHT)/2;
-    layerRect.w = LAYER_WIDTH;
-    layerRect.h = LAYER_HEIGHT;
+    layerRect.x = 0;
+    layerRect.y = 0;
+    layerRect.w = SCREEN_WIDTH;
+    layerRect.h = SCREEN_HEIGHT;
     layerClearRect.x = layerClearRect.y = 0;
-    layerClearRect.w = LAYER_WIDTH;
-    layerClearRect.h = LAYER_HEIGHT;
-    lpanelRect.x = 0;
-    lpanelRect.y = (SCREEN_HEIGHT-PANEL_HEIGHT)/2;
-    rpanelRect.x = SCREEN_WIDTH-PANEL_WIDTH;
-    rpanelRect.y = (SCREEN_HEIGHT-PANEL_HEIGHT)/2;
-    lpanelRect.w = rpanelRect.w = PANEL_WIDTH;
-    lpanelRect.h = rpanelRect.h = PANEL_HEIGHT;
-    panelClearRect.x = panelClearRect.y = 0;
-    panelClearRect.w = PANEL_WIDTH;
-    panelClearRect.h = PANEL_HEIGHT;
+    layerClearRect.w = SCREEN_WIDTH;
+    layerClearRect.h = SCREEN_HEIGHT;
 
     pitch = layer->pitch/(videoBpp/8);
     buf = (LayerBit*)layer->pixels;
-    ppitch = lpanel->pitch/(videoBpp/8);
-    lpbuf = (LayerBit*)lpanel->pixels;
-    rpbuf = (LayerBit*)rpanel->pixels;
 
     initPalette();
     makeSmokeBuf();
-    clearLPanel();
-    clearRPanel();
 
     stick = SDL_JoystickOpen(0);
 
@@ -155,22 +131,11 @@ void blendScreen() {
 
 void flipScreen() {
     SDL_BlitSurface(layer, NULL, video, &layerRect);
-    SDL_BlitSurface(lpanel, NULL, video, &lpanelRect);
-    SDL_BlitSurface(rpanel, NULL, video, &rpanelRect);
-
     SDL_Flip(video);
 }
 
 void clearScreen() {
     SDL_FillRect(layer, &layerClearRect, 0);
-}
-
-void clearLPanel() {
-    SDL_FillRect(lpanel, &panelClearRect, 0);
-}
-
-void clearRPanel() {
-    SDL_FillRect(rpanel, &panelClearRect, 0);
 }
 
 void smokeScreen() {
@@ -194,7 +159,7 @@ void drawLine(int x1, int y1, int x2, int y2, LayerBit color, int width, LayerBi
     } else {
         y1 -= width>>1; y2 -= width>>1;
     }
-    xMax = LAYER_WIDTH-width-1; yMax = LAYER_HEIGHT-width-1;
+    xMax = SCREEN_WIDTH-1; yMax = SCREEN_HEIGHT-1;
 
     if ( x1 < 0 ) {
         if ( x2 < 0 ) return;
@@ -272,7 +237,7 @@ void drawThickLine(int x1, int y1, int x2, int y2,
     } else {
         y1 -= width>>1; y2 -= width>>1;
     }
-    xMax = LAYER_WIDTH-width; yMax = LAYER_HEIGHT-width;
+    xMax = SCREEN_WIDTH; yMax = SCREEN_HEIGHT;
 
     if ( x1 < 0 ) {
         if ( x2 < 0 ) return;
