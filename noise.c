@@ -14,9 +14,11 @@
 #include "degutil.h"
 #include "foe_mtd.h"
 
+char filename[60];
+
 static void initFirst() {
     srand(SDL_GetTicks());
-    initBarragemanager();
+    initBarragemanager(filename);
 }
 
 void initGame() {
@@ -25,7 +27,7 @@ void initGame() {
 }
 
 static void usage(char *argv0) {
-    fprintf(stderr, "Usage: %s [-window] [-reverse] [-brightness n]\n", argv0);
+    fprintf(stderr, "Usage: %s [-window] [-reverse] [-brightness n] [-file file_to_read]\n", argv0);
 }
 
 static void parseArgs(int argc, char *argv[]) {
@@ -41,6 +43,9 @@ static void parseArgs(int argc, char *argv[]) {
             if ( brightness < 0 || brightness > 256 ) {
                 brightness = DEFAULT_BRIGHTNESS;
             }
+        } else if ( (strcmp(argv[i], "-file") == 0) && argv[i+1] ) {
+            i++;
+            strncpy(filename, argv[i], 60);
         } else {
             usage(argv[0]);
             exit(1);

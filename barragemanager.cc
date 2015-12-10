@@ -27,8 +27,8 @@ static void readABulletMLFile(const char *path, Barrage brg[]) {
 
 static unsigned int rnd;
 
-void initBarragemanager() {
-    readABulletMLFile("test.xml", barragePattern);
+void initBarragemanager(const char *f) {
+    readABulletMLFile(f, barragePattern);
 }
 
 void closeBarragemanager() {

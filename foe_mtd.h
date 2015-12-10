@@ -10,8 +10,6 @@ extern int nowait;
 void initFoes();
 void closeFoes();
 void moveFoes();
-void clearFoes();
-void clearFoesZako();
 void drawBulletsWake();
 void drawFoes();
 void drawBullets();

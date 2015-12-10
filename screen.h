@@ -1,15 +1,13 @@
 #include "SDL.h"
 #include "vector.h"
 
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
-#define LAYER_WIDTH 320
-#define LAYER_HEIGHT 480
-#define PANEL_WIDTH 160
-#define PANEL_HEIGHT 480
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 600
+#define LAYER_WIDTH 400
+#define LAYER_HEIGHT 600
 
-#define SCAN_WIDTH 320
-#define SCAN_HEIGHT 480
+#define SCAN_WIDTH 400
+#define SCAN_HEIGHT 600
 #define SCAN_WIDTH_8 (SCAN_WIDTH<<8)
 #define SCAN_HEIGHT_8 (SCAN_HEIGHT<<8)
 

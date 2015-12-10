@@ -1,4 +1,4 @@
-void initBarragemanager();
+void initBarragemanager(const char* f);
 void closeBarragemanager();
 void initBarrages();
 void setBarrages(float level, int bm, int midMode);

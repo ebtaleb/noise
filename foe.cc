@@ -212,7 +212,15 @@ void drawBullets() {
     int x, y, px, py;
     int bc;
     for ( i=0 ; i<FOE_MAX ; i++ ) {
+
         if ( foe[i].spc == NOT_EXIST || foe[i].spc == FOE ) continue;
+        //if (i == 0) {
+            //fe = &(foe[i]);
+            //printf("%d\n", fe->pos.x);
+            //printf("%d\n", (fe->pos.x/SCAN_WIDTH*LAYER_WIDTH));
+            //printf("%d\n", (fe->pos.x/SCAN_WIDTH*LAYER_WIDTH) >> 7);
+            //printf("\n");
+        //}
         fe = &(foe[i]);
         x = (fe->pos.x/SCAN_WIDTH*LAYER_WIDTH)>>8;
         y = (fe->pos.y/SCAN_HEIGHT*LAYER_HEIGHT)>>8;

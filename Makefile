@@ -1,8 +1,8 @@
 NAME   = noise
 O      = o
 RM     = rm -f
-CC     = gcc
-CXX    = g++
+CC     = ccache gcc
+CXX    = ccache g++
 
 PROG        = $(NAME)
 

@@ -4,3 +4,5 @@
 *.a
 noise
 *.prf
+.gdb_history
+core
